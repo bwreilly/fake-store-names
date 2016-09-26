@@ -1,9 +1,9 @@
 import markovify
 
 
-STORE_FILE = "stores.txt"
-PROCESSOR_FILE = "processors.txt"
-FARM_FILE = "farms.txt"
+STORE_FILE = "core/data/stores.txt"
+PROCESSOR_FILE = "core/data/processors.txt"
+FARM_FILE = "core/data/farms.txt"
 
 OVERLAP_RATIO = 0.50
 OVERLAP_TOTAL = 2
