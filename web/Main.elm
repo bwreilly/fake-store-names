@@ -1,57 +1,47 @@
 import Html exposing (..)
 import Html.App as App
 import Html.Attributes exposing (..)
-import Html.Events exposing (onInput, onSubmit, onClick)
-import String
-import Char exposing (isDigit, isLower, isUpper)
-
+import Html.Events exposing (onClick)
+import Random
 
 main =
-  App.beginnerProgram { model = model, view = view, update = update }
+  App.program
+    { init = init
+    , update = update
+    , subscriptions = subscriptions
+    , view = view }
 
 -- MODEL
 
 type alias Model =
-  { name : String
-  , age : String
-  , password : String
-  , passwordAgain : String
-  , error : String
-  }
+  { die1 : Int
+  , die2 : Int}
 
 
-model : Model
-model =
-  Model "" "" "" "" ""
+init : (Model, Cmd Msg)
+init = (Model 1 1, Cmd.none)
 
+subscriptions :  Model -> Sub Msg
+subscriptions model =
+  Sub.none
 
 -- UPDATE
 
 type Msg
-    = Name String
-    | Age String
-    | Password String
-    | PasswordAgain String
-    | RunValidation Model
+    = Roll
+    | Show (Int, Int)
 
 
-update : Msg -> Model -> Model
+twoD6 = Random.pair (Random.int 1 6) (Random.int 1 6)
+
+update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
   case msg of
-    Name name ->
-      { model | name = name }
+    Roll ->
+      (model, Random.generate Show twoD6)
 
-    Age age ->
-      { model | age = age }
-
-    Password password ->
-      { model | password = password }
-
-    PasswordAgain password ->
-      { model | passwordAgain = password }
-
-    RunValidation model ->
-      { model | error = (validate model) }
+    Show (a, b) ->
+      (Model a b, Cmd.none)
 
 -- VIEW
 
@@ -59,27 +49,7 @@ view : Model -> Html Msg
 view model =
   div []
     [
-      input [ type' "text", placeholder "Name", onInput Name ] []
-    , input [ type' "text", placeholder "Age", onInput Age ] []
-    , input [ type' "password", placeholder "Password", onInput Password ] []
-    , input [ type' "password", placeholder "Re-enter Password", onInput PasswordAgain ] []
-    , button [ onClick (RunValidation model) ] [ text "What the heck" ]
-    , div [ style [("color", "red")] ] [ text model.error ]
+      h1 [] [ text (toString model.die1) ]
+    , h1 [] [ text (toString model.die2) ]
+    , button [ onClick Roll ] [ text "Roll" ]
     ]
-
-validate : Model -> String
-validate model =
-  if model.password /= model.passwordAgain then
-    "Passwords do not match"
-  else if String.length model.password < 8 then
-    "Password too short"
-  else if not (String.any isDigit model.password) then
-    "Password lacks a numeric digit"
-  else if not (String.any isLower model.password) then
-    "Password lacks a lower case character"
-  else if not (String.any isUpper model.password) then
-    "Password lacks an upper case character"
-  else if not (List.all isDigit (String.toList model.age)) then
-    "Age must be a number"
-  else
-    ""
