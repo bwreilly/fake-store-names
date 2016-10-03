@@ -1,6 +1,7 @@
 FROM node:6.6
 RUN npm install -g elm
 
+WORKDIR /web
 
 COPY elm-package.json .
 COPY Main.elm .
