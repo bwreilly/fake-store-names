@@ -4,9 +4,9 @@ import markovify
 # TODO: mix in hip hop titles
 # e.g., I LIKE BIG BUDS AND I CANNOT LIE
 
-STORE_FILE = "core/data/stores.txt"
-PROCESSOR_FILE = "core/data/processors.txt"
-FARM_FILE = "core/data/farms.txt"
+STORE_FILE = "data/stores.txt"
+PROCESSOR_FILE = "data/processors.txt"
+FARM_FILE = "data/farms.txt"
 
 OVERLAP_RATIO = 0.50
 OVERLAP_TOTAL = 2

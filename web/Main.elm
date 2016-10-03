@@ -1,11 +1,11 @@
 import Html exposing (..)
 import Html.App as App
-import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import Http
 import Json.Decode as Json
 import Task
 
+main : Program Never
 main =
   App.program
     { init = init
@@ -49,7 +49,7 @@ getNextName : Cmd Msg
 getNextName =
   let
     url =
-      "http://localhost:5000"
+      "http://0.0.0.0:5000"
   in
     Task.perform FetchFail FetchSucceed (Http.get decodeName url)
 

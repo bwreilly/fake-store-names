@@ -3,7 +3,7 @@ from flask_restful import Resource, Api
 
 from generate import new_store
 
-FRONTEND = "http://localhost:8000"
+FRONTEND = "http://0.0.0.0:8000"
 
 app = Flask(__name__)
 # app.config.from_object('config')
@@ -17,7 +17,7 @@ class StoreName(Resource):
 
 @app.after_request
 def after_request(response):
-  response.headers.add('Access-Control-Allow-Origin', FRONTEND)
+  response.headers.add('Access-Control-Allow-Origin', "*")
   response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
   response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE')
   return response
