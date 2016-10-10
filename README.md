@@ -45,6 +45,13 @@ As a HTTP api
 $ python server.py
 ```
 
+With docker, locally
+
+```bash
+$ docker build -t store_api core
+$ docker run -d -p 5000:5000 store_api
+```
+
 ### Frontend
 
 Install Elm with `npm`
@@ -58,4 +65,11 @@ Then just run it with
 ```bash
 $ cd web
 $ elm reactor
+```
+
+Or with docker, locally
+
+```bash
+$ docker build -t store_web web
+$ docker run -d -p 8000:8000 store_web
 ```
