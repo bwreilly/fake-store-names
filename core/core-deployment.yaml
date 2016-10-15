@@ -11,10 +11,10 @@ metadata:
 spec:
   ports:
     # the port that this service should serve on
-  - nodePort: 31065
-    port: 5000
-    protocol: TCP
-    targetPort: 5000
+    - nodePort: 31065
+      port: 5000
+      protocol: TCP
+      targetPort: 5000
   type: LoadBalancer
   selector:
     app: core-api
