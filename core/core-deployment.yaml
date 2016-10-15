@@ -1,0 +1,52 @@
+# Deployment for backend API
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: core-api
+  labels:
+    app: core-api
+    tier: backend
+    role: master
+spec:
+  ports:
+    # the port that this service should serve on
+  - nodePort: 31065
+    port: 5000
+    protocol: TCP
+    targetPort: 5000
+  type: LoadBalancer
+  selector:
+    app: core-api
+    tier: backend
+    role: master
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: core-api
+spec:
+  # this replicas value is default
+  # modify it according to your case
+  replicas: 2
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: core-api
+        tier: backend
+        role: master
+    spec:
+      containers:
+      - image: gcr.io/store-name-generator/api:v1.1.0
+        name: api
+        ports:
+        - containerPort: 5000
+      # - name: webserver
+      #   image: nginx
+      #   ports:
+      #     - containerPort: 8080
