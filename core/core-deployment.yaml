@@ -1,5 +1,4 @@
 # Deployment for backend API
-
 apiVersion: v1
 kind: Service
 metadata:
@@ -11,8 +10,7 @@ metadata:
 spec:
   ports:
     # the port that this service should serve on
-    - nodePort: 31065
-      port: 5000
+    - port: 5000
       protocol: TCP
       targetPort: 5000
   type: LoadBalancer
@@ -21,13 +19,33 @@ spec:
     tier: backend
     role: master
 ---
+# Config for nginx, see https://github.com/kubernetes/kubernetes/tree/master/examples/https-nginx
+# Regenerate with `kubectl create configmap nginx-api-configmap --from-file=core/nginx.conf`
+# apiVersion: v1
+#   data:
+#     nginx.conf: |
+#       server {
+#           listen 80;
+#
+#           server_name _;
+#
+#           location / {
+#               proxy_pass         http://0.0.0.0:5000/;
+#               proxy_redirect     off;
+#
+#               proxy_set_header   Host                 $host;
+#               proxy_set_header   X-Real-IP            $remote_addr;
+#               proxy_set_header   X-Forwarded-For      $proxy_add_x_forwarded_for;
+#               proxy_set_header   X-Forwarded-Proto    $scheme;
+#           }
+#       }
+#   kind: ConfigMap
+# ---
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: core-api
 spec:
-  # this replicas value is default
-  # modify it according to your case
   replicas: 2
   strategy:
     rollingUpdate:
@@ -46,7 +64,7 @@ spec:
         name: api
         ports:
         - containerPort: 5000
-      # - name: webserver
-      #   image: nginx
-      #   ports:
-      #     - containerPort: 8080
+      - name: webserver
+        image: nginx
+        ports:
+          - containerPort: 80
