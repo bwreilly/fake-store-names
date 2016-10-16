@@ -7,64 +7,48 @@ metadata:
     app: core-api
     tier: backend
     role: master
+    version: 0.0.1
 spec:
   ports:
-    # the port that this service should serve on
-    - port: 5000
+    - port: 80
       protocol: TCP
-      targetPort: 5000
+      targetPort: 80
   type: LoadBalancer
   selector:
     app: core-api
     tier: backend
     role: master
 ---
-# Config for nginx, see https://github.com/kubernetes/kubernetes/tree/master/examples/https-nginx
-# Regenerate with `kubectl create configmap nginx-api-configmap --from-file=core/nginx.conf`
-# apiVersion: v1
-#   data:
-#     nginx.conf: |
-#       server {
-#           listen 80;
-#
-#           server_name _;
-#
-#           location / {
-#               proxy_pass         http://0.0.0.0:5000/;
-#               proxy_redirect     off;
-#
-#               proxy_set_header   Host                 $host;
-#               proxy_set_header   X-Real-IP            $remote_addr;
-#               proxy_set_header   X-Forwarded-For      $proxy_add_x_forwarded_for;
-#               proxy_set_header   X-Forwarded-Proto    $scheme;
-#           }
-#       }
-#   kind: ConfigMap
-# ---
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: core-api
 spec:
   replicas: 2
-  strategy:
-    rollingUpdate:
-      maxSurge: 1
-      maxUnavailable: 1
-    type: RollingUpdate
   template:
     metadata:
       labels:
         app: core-api
         tier: backend
         role: master
+        version: 0.0.1
     spec:
+      volumes:
+        - name: configmap-volume
+          configMap:
+            name: nginx-api-configmap
       containers:
-      - image: gcr.io/store-name-generator/api:v1.1.0
-        name: api
+      - name: api
+        image: gcr.io/store-name-generator/api:v1.1.0
         ports:
         - containerPort: 5000
       - name: webserver
         image: nginx
+        volumeMounts:
+        # TODO: SSL
+        # - mountPath: /etc/nginx/ssl
+        #   name: secret-volume
+        - mountPath: /etc/nginx/conf.d
+          name: configmap-volume
         ports:
-          - containerPort: 80
+        - containerPort: 80
