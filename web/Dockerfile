@@ -6,4 +6,4 @@ WORKDIR /static
 COPY elm-package.json .
 COPY Main.elm .
 
-RUN elm make Main.elm --output main.html
+RUN elm make Main.elm --output main.html --yes

@@ -66,6 +66,14 @@ $ elm reactor
 1. Run tests etc
 2. Build the containers
 3. Upload the containers somewhere
+4. If the [configmaps](http://kubernetes.io/docs/user-guide/configmap/) need to be changed (`nginx.conf`), run
+
+  ```
+  kubectl replace configmap nginx-api-configmap --from-file=core/nginx.conf
+  ```
+
+  Note that this doesn't cause a deployment rollout, you need to either scale or see `Actually causing a rollout` below.
+
 4. Apply the config/specs (yaml files) e.g.,
    ```
    kubectl apply -f core/core-deployment.yaml
