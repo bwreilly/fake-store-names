@@ -1,0 +1,65 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-app
+  labels:
+    app: web-app
+    tier: frontend
+    role: master
+    version: 0.0.1
+spec:
+  ports:
+    - port: 80
+      protocol: TCP
+      targetPort: 80
+  type: LoadBalancer
+  selector:
+    app: web-app
+    tier: frontend
+    role: master
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: web-app
+spec:
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: web-app
+        tier: frontend
+        role: master
+        version: 0.0.1
+    spec:
+      volumes:
+      - name: web-thangs
+        gcePersistentDisk:
+          pdName: static-resources
+          readOnly: false
+          fsType: ext4
+      containers:
+      - name: web-app-build
+        image: gcr.io/store-name-generator/web:v1.1.1
+        volumeMounts:
+        - mountPath: /static
+          name: web-thangs
+      - name: web-app
+        image: gcr.io/store-name-generator/web:v1.1.0
+        volumeMounts:
+        - mountPath: /static
+          name: web-thangs
+      - name: webserver
+        image: nginx
+        volumeMounts:
+        - mountPath: /usr/share/nginx/html
+          name: static-volume
+        # TODO: SSL
+        # - mountPath: /etc/nginx/ssl
+        #   name: secret-volume
+        # TODO: config?
+        # - mountPath: /etc/nginx/conf.d
+        #   name: configmap-volume
+        ports:
+        - containerPort: 80
+        restartPolicy: OnFailures
