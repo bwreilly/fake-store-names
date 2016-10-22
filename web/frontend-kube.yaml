@@ -31,29 +31,31 @@ spec:
         tier: frontend
         role: master
         version: 0.0.1
+      annotations:
+        # Gotta build the stuff and dump it somewhere before firing up nginx to serve it
+        # See http://kubernetes.io/docs/user-guide/production-pods/#handling-initialization
+        pod.alpha.kubernetes.io/init-containers: '[
+            {
+                "name": "static-build",
+                "image": "gcr.io/store-name-generator/web:v1.1.3",
+                "volumeMounts": [
+                    {
+                        "name": "static-resources",
+                        "mountPath": "/static"
+                    }
+                ]
+            }
+        ]'
     spec:
       volumes:
-      - name: web-thangs
-        gcePersistentDisk:
-          pdName: static-resources
-          readOnly: false
-          fsType: ext4
+      - name: static-resources
+        emptyDir: {}
       containers:
-      - name: web-app-build
-        image: gcr.io/store-name-generator/web:v1.1.1
-        volumeMounts:
-        - mountPath: /static
-          name: web-thangs
-      - name: web-app
-        image: gcr.io/store-name-generator/web:v1.1.0
-        volumeMounts:
-        - mountPath: /static
-          name: web-thangs
       - name: webserver
         image: nginx
         volumeMounts:
         - mountPath: /usr/share/nginx/html
-          name: static-volume
+          name: static-resources
         # TODO: SSL
         # - mountPath: /etc/nginx/ssl
         #   name: secret-volume
@@ -62,4 +64,3 @@ spec:
         #   name: configmap-volume
         ports:
         - containerPort: 80
-        restartPolicy: OnFailures
