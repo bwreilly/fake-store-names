@@ -3,7 +3,7 @@ from flask_restful import Resource, Api
 
 from generate import new_store
 
-FRONTEND = "http://0.0.0.0:8000"
+FRONTEND = "http://130.211.201.250"
 
 app = Flask(__name__)
 # app.config.from_object('config')

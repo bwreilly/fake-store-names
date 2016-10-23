@@ -1,0 +1,68 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-app
+  labels:
+    app: web-app
+    tier: frontend
+    role: master
+    version: 0.0.1
+spec:
+  ports:
+    - port: 80
+      protocol: TCP
+      targetPort: 80
+  type: LoadBalancer
+  selector:
+    app: web-app
+    tier: frontend
+    role: master
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: web-app
+spec:
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: web-app
+        tier: frontend
+        role: master
+        version: 0.0.2 # this (or spec.containers changes) must be changed to trigger a rollout
+      annotations:
+        # Gotta build the stuff and dump it somewhere before firing up nginx to serve it
+        # See http://kubernetes.io/docs/user-guide/production-pods/#handling-initialization
+        # For whatever reason, `COPY` didn't wore in the container, hence the below command
+        pod.alpha.kubernetes.io/init-containers: '[
+            {
+                "name": "static-build",
+                "image": "gcr.io/store-name-generator/web:v1.1.5",
+                "command": ["cp", "/build/index.html", "/static"],
+                "volumeMounts": [
+                    {
+                        "name": "static-resources",
+                        "mountPath": "/static"
+                    }
+                ]
+            }
+        ]'
+    spec:
+      volumes:
+      - name: static-resources
+        emptyDir: {}
+      containers:
+      - name: webserver
+        image: nginx
+        volumeMounts:
+        - mountPath: /usr/share/nginx/html
+          name: static-resources
+        # TODO: SSL
+        # - mountPath: /etc/nginx/ssl
+        #   name: secret-volume
+        # TODO: config?
+        # - mountPath: /etc/nginx/conf.d
+        #   name: configmap-volume
+        ports:
+        - containerPort: 80

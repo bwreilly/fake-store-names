@@ -1,0 +1,54 @@
+# Deployment for backend API
+apiVersion: v1
+kind: Service
+metadata:
+  name: core-api
+  labels:
+    app: core-api
+    tier: backend
+    role: master
+    version: 0.0.1
+spec:
+  ports:
+    - port: 80
+      protocol: TCP
+      targetPort: 80
+  type: LoadBalancer
+  selector:
+    app: core-api
+    tier: backend
+    role: master
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: core-api
+spec:
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: core-api
+        tier: backend
+        role: master
+        version: 0.0.1
+    spec:
+      volumes:
+        - name: configmap-volume
+          configMap:
+            name: nginx-api-configmap
+      containers:
+      - name: api
+        image: gcr.io/store-name-generator/api:v1.1.1
+        ports:
+        - containerPort: 5000
+      - name: webserver
+        image: nginx
+        volumeMounts:
+        # TODO: SSL
+        # - mountPath: /etc/nginx/ssl
+        #   name: secret-volume
+        - mountPath: /etc/nginx/conf.d
+          name: configmap-volume
+        ports:
+        - containerPort: 80

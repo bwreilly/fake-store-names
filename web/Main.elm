@@ -49,7 +49,7 @@ getNextName : Cmd Msg
 getNextName =
   let
     url =
-      "http://0.0.0.0:5000"
+      "http://104.197.28.160/"  -- TODO: some kind of config on compile?
   in
     Task.perform FetchFail FetchSucceed (Http.get decodeName url)
 
