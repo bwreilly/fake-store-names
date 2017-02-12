@@ -1,6 +1,6 @@
 ## What is this
 
-Many legal (i503 licensed) cannabis stores in Washington State have amusing names. This thing generates new ones based on the existing ones.
+Many legal (i502 licensed) cannabis stores in Washington State have amusing names. This thing generates new ones based on the existing ones.
 
 ## What, why?
 
