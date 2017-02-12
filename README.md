@@ -6,6 +6,7 @@ Many legal (i502 licensed) cannabis stores in Washington State have amusing name
 
 Oh just for fun - gave me a chance to mess around with Kubernetes, Google web services, Elm, etc. and make some ridiculous names:
 
+```
 'BREAKING BUD DEPOT'
 'BIG BUDDAS COLLECTIVE STORE OF GREEN TOKEN CANNABIS, LLC.'
 'IT IS LIT 2 LLC'
@@ -14,6 +15,7 @@ Oh just for fun - gave me a chance to mess around with Kubernetes, Google web se
 'BUY THE CROP'
 'HOT SPOT FOR YOU LLC'
 'GREEN LADY BUDS ARE US'
+```
 
 ## This is absurd
 
