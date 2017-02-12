@@ -30,15 +30,16 @@ spec:
         app: web-app
         tier: frontend
         role: master
-        version: 0.0.2 # this (or spec.containers changes) must be changed to trigger a rollout
+        version: 0.0.2  # this (or spec.containers changes) must be changed to trigger a rollout
       annotations:
+        version: 0.0.3  # ???
         # Gotta build the stuff and dump it somewhere before firing up nginx to serve it
         # See http://kubernetes.io/docs/user-guide/production-pods/#handling-initialization
         # For whatever reason, `COPY` didn't wore in the container, hence the below command
         pod.alpha.kubernetes.io/init-containers: '[
             {
                 "name": "static-build",
-                "image": "gcr.io/store-name-generator/web:v1.1.5",
+                "image": "gcr.io/store-name-generator/web:v1.1.6",
                 "command": ["cp", "/build/index.html", "/static"],
                 "volumeMounts": [
                     {

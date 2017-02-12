@@ -64,5 +64,5 @@ view : Model -> Html Msg
 view model =
   div []
     [ h2 [] [text model.name]
-    , button [ onClick MorePlease ] [ text "Another!" ]
+    , button [ onClick MorePlease ] [ text "Good yes more." ]
     ]

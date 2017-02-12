@@ -1,6 +1,25 @@
-## What
+## What is this
 
-Create your own cannabis store/processor/farm name based on existing ones.
+Many legal (i503 licensed) cannabis stores in Washington State have amusing names. This thing generates new ones based on the existing ones.
+
+## What, why?
+
+Oh just for fun - gave me a chance to mess around with Kubernetes, Google web services, Elm, etc. and make some ridiculous names:
+
+'BREAKING BUD DEPOT'
+'BIG BUDDAS COLLECTIVE STORE OF GREEN TOKEN CANNABIS, LLC.'
+'IT IS LIT 2 LLC'
+'MAGIC 420 HOLIDAY'
+'CAPTAINZ GANJA GIRLS, LLC'
+'BUY THE CROP'
+'HOT SPOT FOR YOU LLC'
+'GREEN LADY BUDS ARE US'
+
+## This is absurd
+
+It's a young industry.
+
+## Usage
 
 ### Api
 
@@ -73,6 +92,8 @@ $ docker run -d -p 8000:8000 store_web
 
 ## Deployment Notes
 
+At the time of this writing Kubernetes is both a bit elaborate for so simple a thing and is a quickly moving target so keep that in mind.
+
 # Kubernetes
 
 ### Continuous Integration/Deployment
@@ -104,4 +125,3 @@ See the docs for [Deployments](http://kubernetes.io/docs/user-guide/deployments/
 > Note: a Deployment’s rollout is triggered if and only if the Deployment’s pod template (i.e. .spec.template) is changed, e.g. updating labels or container images of the template. Other updates, such as scaling the Deployment, will not trigger a rollout.
 
 I've done this with a dumb `version` label there might be a better way.
->>>>>>> ops/k8-pod-ugh

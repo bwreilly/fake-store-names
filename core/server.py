@@ -1,12 +1,13 @@
+import os, shutil
+
 from flask import Flask
 from flask_restful import Resource, Api
 
 from generate import new_store
 
-FRONTEND = "http://130.211.201.250"
+FRONTEND = "http://your-url-here-for-cors-support-friendo"
 
 app = Flask(__name__)
-# app.config.from_object('config')
 api = Api(app)
 
 class StoreName(Resource):
